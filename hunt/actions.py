@@ -1,4 +1,6 @@
-import spoilr.actions
+import spoilr.actions as spoilr_actions
+import models
+import spoilr.models as spoilr_models
 
 def grant_points(team, amount, reason):
     logger.info("grant %d points to %s (%s)", amount, team.url, reason)
@@ -15,7 +17,7 @@ def grant_points(team, amount, reason):
             unlock.enough_points = True
             unlock.save()
             if unlock.reached:
-                actions.release_puzzle(team, puzzle, reason)
+                spoilr_actions.release_puzzle(team, puzzle, reason)
         else:
             Y2015PuzzleUnlock(team=team, puzzle=puzzl, enough_points=True).save()
 
@@ -26,7 +28,7 @@ def puzzle_reached(team, puzzle, reason):
         unlock.reached = True
         unlock.save()
         if unlock.enough_points:
-            actions.release_puzzle(team, puzzle, reason)
+            spoilr_actions.release_puzzle(team, puzzle, reason)
     else:
         Y2015PuzzleUnlock(team=team, puzzle=puzzl, reached=True).save()
 
@@ -36,6 +38,12 @@ def reach_linked_puzzles(team, puzzle):
     for edge in Y2015PuzzleLink.objects.filter(puzzle2=puzzle):
         puzzle_reached(team, edge.puzzle1, 'connected to "%s"' % puzzle.name)
 
-actions.subscribe(
-        actions.puzzle_answer_correct_message,
-        reach_linked_puzzles)
+def update_deep(team, metapuzzle):
+    points = models.Y2015MetapuzzleData.objects.get(metapuzzle=metapuzzle)
+    grant_points(team, points, "Team solved %s" % (metapuzzle,))
+
+spoilr_actions.subscribe(spoilr_actions.metapuzzle_answer_correct_message,
+                         update_deep)
+
+spoilr_actions.subscribe(spoilr_actions.puzzle_answer_correct_message,
+                         reach_linked_puzzles)

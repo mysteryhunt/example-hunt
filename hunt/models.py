@@ -49,3 +49,14 @@ class Y2015PuzzleUnlock(models.Model):
     class Meta:
         verbose_name = '2015 puzzle unlock status'
         verbose_name_plural = '2015 puzzle unlock statuses'
+
+class Y2015MetapuzzleData(models.Model):
+    metapuzzle = models.OneToOneField(Metapuzzle)
+    points = models.IntegerField(default=0, verbose_name='Points granted upon solution')
+
+    def __str__(self):
+        return "%s (grants %d" % (self.puzzle.name, self.points)
+
+    class Meta:
+        verbose_name = '2015 metapuzzle data'
+        verbose_name_plural = '2015 metapuzzle data'

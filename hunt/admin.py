@@ -29,3 +29,15 @@ class Y2015PuzzleUnlockAdmin(admin.ModelAdmin):
     list_filter = ('team__name', 'reached', 'enough_points')
     search_fields = ['team__name', 'puzzle__name', 'puzzle__round__name']
     ordering = ['team__name', 'puzzle__round__order', 'puzzle__order']
+
+admin.site.register(Y2015PuzzleUnlock, Y2015PuzzleUnlockAdmin)
+
+class Y2015MetapuzzleDataAdmin(admin.ModelAdmin):
+    def metapuzzle_name(data):
+        return data.metapuzzle.name
+    metapuzzle_name.short_description = 'Metapuzzle Name'
+    list_display = ('points', metapuzzle_name)
+    search_fields = ['metapuzzle__name']
+    ordering = ['points']
+
+admin.site.register(Y2015MetapuzzleData, Y2015MetapuzzleDataAdmin)
