@@ -55,7 +55,7 @@ class Y2015MetapuzzleData(models.Model):
     points = models.IntegerField(default=0, verbose_name='Points granted upon solution')
 
     def __str__(self):
-        return "%s (grants %d" % (self.puzzle.name, self.points)
+        return "%s (grants %d" % (self.metapuzzle.name, self.points)
 
     class Meta:
         verbose_name = '2015 metapuzzle data'
