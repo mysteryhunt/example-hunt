@@ -22,6 +22,7 @@ def grant_points(team, amount, reason, ctx=''):
             unlock.save()
             if unlock.reached:
                 spoilr_actions.release_puzzle(team, puzzle, reason)
+                spoilr_actions.release_round(team, puzzle.round, "team can access puzzle %s in round and has enough points (%d)" % (puzzle.name, td.points)
         else:
             models.Y2015PuzzleUnlock(team=team, puzzle=puzzle, enough_points=True).save()
 
