@@ -15,4 +15,4 @@ def puzzles_view(request):
     rounds = team.rounds.all()
 
     return render(request, 'hunt/puzzles.tmpl', {'title': 'Puzzles for %s' % (team.name,),
-                                                 'unlocked_puzzles': puzzles, 'unlocked_rounds': rounds})
+                                                 'puzzles': puzzles, 'rounds': rounds})

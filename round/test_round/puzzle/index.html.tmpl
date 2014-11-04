@@ -1,0 +1,27 @@
+{% extends "hunt/layout.tmpl" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+{% if type == 'meta' %}
+   {% url 'spoilr.submit.submit_metapuzzle' puzzle as action %}
+{% else %}
+   {% url 'spoilr.submit.submit_puzzle' puzzle as action %}
+{% endif %}
+<div class="container">
+  <h1 class="page-header">{{ title }}</h1>
+  <div class='puzzle'>
+     {{ index_html|safe }}
+  </div>
+</div>
+ <div class="form">
+   <form action="{{ action }}" method="POST">
+     <p>Answer: <input type="text" name="answer"></p>
+     <input type="hidden" name="team" value="{{ team }}">
+     <input type="hidden" name="phone" value="555-555-5555">
+     {% csrf_token %}
+     <input type="submit">
+   </form>
+ </div>
+
+{% endblock %}
